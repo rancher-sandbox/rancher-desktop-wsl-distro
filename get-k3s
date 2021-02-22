@@ -17,13 +17,14 @@ function latest_build {
     # check if the k8s version already includes the k3s build suffix
     local regex='\+k3s[0-9]+$'
     if [[ ${k8s_version} =~ ${regex} ]]; then
-        echo ${k8s_version}
+        echo "${k8s_version}"
         return
     fi
 
     # locate latest k3s build of k8s_version in the cache
-    local k3s_build=$(ls -1d ${CACHE_DIR}/${k8s_version}+k3s* 2>/dev/null \
-                          | sed 's/.*+k3s//' | sort -h -r | head -1)
+    local k3s_build
+    k3s_build=$(ls -1d "${CACHE_DIR}/${k8s_version}"+k3s* 2>/dev/null \
+                    | sed 's/.*+k3s//' | sort -h -r | head -1)
 
     # if no cached version exists, assume at least build 1 exist on Github.
     if [ -z "${k3s_build}" ]; then
@@ -35,7 +36,7 @@ function latest_build {
         local version="${k8s_version}+k3s$((k3s_build+1))"
         local url="${DOWNLOAD_URL}/${version}/k3s"
         # TODO: what is a reasonable timeout to assume no internet connectivity?
-        if ! curl --fail --silent --head --max-time 5 --output /dev/null $url; then
+        if ! curl --fail --silent --head --max-time 5 --output /dev/null "${url}"; then
             echo "${k8s_version}+k3s${k3s_build}"
             return
         fi
@@ -73,9 +74,10 @@ function verify_binaries {
 # path to the cache directory. Non-zero exit means the binaries don't exist
 # or couldn't be downloaded.
 function get_binaries {
-    local version="$(latest_build $1)"
-    local dir="${CACHE_DIR}/${version}"
+    local version
+    version="$(latest_build "$1")"
 
+    local dir="${CACHE_DIR}/${version}"
     mkdir -p "${dir}"
     cd "${dir}"
 
