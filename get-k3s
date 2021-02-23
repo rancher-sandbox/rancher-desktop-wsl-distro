@@ -68,6 +68,8 @@ function verify_binaries {
     if ! cat sha256sum-amd64.txt | grep -v txt$ | sha256sum --quiet --check; then
         return 1
     fi
+
+    touch .verified
 }
 
 # Download binaries for specified k8s version and return the fully qualified
@@ -90,7 +92,6 @@ function get_binaries {
             >&2 echo "Version ${version} is not in cache and couldn't be downloaded"
             return 1
         fi
-        touch .verified
     fi
 
     echo "${dir}/${version}"
