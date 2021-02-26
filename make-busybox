@@ -5,4 +5,4 @@
 
 FINDALL="find -L bin -samefile bin/busybox -o -samefile bin/coreutils"
 docker run --rm -v $PWD:/host --entrypoint /bin/sh rancher/k3s:v1.20.4-k3s1 \
-       -c "tar cf /host/busybox.tar bin/find \$($FINDALL) tmp"
+       -c "ln -s busybox /bin/mount; tar cf /host/busybox.tar bin/find \$($FINDALL) tmp"
