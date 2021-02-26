@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 : "${CACHE_DIR:=$HOME/.tinyk3s}"
 
@@ -36,7 +36,7 @@ function latest_build {
         local version="${k8s_version}+k3s$((k3s_build+1))"
         local url="${DOWNLOAD_URL}/${version}/k3s"
         # TODO: what is a reasonable timeout to assume no internet connectivity?
-        if ! curl --fail --silent --head --max-time 5 --output /dev/null "${url}"; then
+        if ! wget --quiet --spider --tries 1 --timeout 5 -O /dev/null "${url}"; then
             echo "${k8s_version}+k3s${k3s_build}"
             return
         fi
@@ -81,19 +81,24 @@ function get_binaries {
 
     local dir="${CACHE_DIR}/${version}"
     mkdir -p "${dir}"
-    cd "${dir}"
+    pushd "${dir}" >/dev/null
 
     if ! verify_binaries; then
         for asset in k3s k3s-airgap-images-amd64.tar sha256sum-amd64.txt; do
-            curl --fail --silent --location --output "${asset}" \
-                 "${DOWNLOAD_URL}/${version}/${asset}"
+            if ! wget --quiet --output-document "${asset}" \
+                 "${DOWNLOAD_URL}/${version}/${asset}"; then
+                rm "${asset}"
+            fi
         done
         if ! verify_binaries; then
             >&2 echo "Version ${version} is not in cache and couldn't be downloaded"
+            popd >/dev/null
+            rmdir "${dir}"
             return 1
         fi
     fi
 
+    popd >/dev/null
     echo "${dir}/${version}"
 }
 
