@@ -1,6 +1,6 @@
 #!/bin/bash
 
-: "${CACHE_DIR:=$HOME/.tinyk3s}"
+: "${CACHE_DIR:=$PWD/AppData/Local/K3s-Cache}"
 
 DOWNLOAD_URL="https://github.com/k3s-io/k3s/releases/download"
 

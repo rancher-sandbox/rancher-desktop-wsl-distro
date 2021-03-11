@@ -15,4 +15,8 @@ echo "root:x:0:0:root:/root:/bin/sh" > etc/passwd
 
 mkdir -p tmp
 
+mkdir -p usr/local/bin
+cp /host/kubeconfig usr/local/bin/
+cp /host/run-k3s usr/local/bin/
+
 tar cf /host/distro.tar *
