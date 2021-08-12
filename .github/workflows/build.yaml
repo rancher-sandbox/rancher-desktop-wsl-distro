@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Build
+on: push
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+    - run: ./make-distro
+    - uses: actions/upload-artifact@v2
+      with:
+        name: distro
+        path: distro.tar
