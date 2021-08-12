@@ -43,7 +43,7 @@ for package in ${packages}; do
   fi
   for path in $(apk info --quiet --contents "${package}"); do
     mkdir -p "/distro/${path%/*}"
-    cp "/${path}" "/distro/${path}"
+    cp -P "/${path}" "/distro/${path}"
   done
 done
 
