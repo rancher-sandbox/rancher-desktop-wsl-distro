@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-docker run --rm -v $PWD:/host \
-       --entrypoint /host/get-busybox rancher/k3s:v1.20.4-k3s1
-
-docker run --rm -v $PWD:/host \
-       --entrypoint /host/get-screen alpine
