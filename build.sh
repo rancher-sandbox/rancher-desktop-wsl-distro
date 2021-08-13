@@ -59,3 +59,12 @@ cp /etc/ssl/certs/ca-certificates.crt /distro/etc/ssl/certs/
 
 # Create the root user
 echo root:x:0:0:root:/root:/bin/sh > /distro/etc/passwd
+
+# Generate /etc/os-release; we do it this way to evaluate variables.
+. /os-release
+for field in $(awk -F= '/=/{ print $1 }' /os-release); do
+  value="$(eval "echo \${${field}}")"
+  if [ -n "${value}" ]; then
+    echo "${field}=\"${value}\"" >> /distro/etc/os-release
+  fi
+done
