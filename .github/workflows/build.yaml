@@ -11,6 +11,8 @@ jobs:
       with:
         persist-credentials: false
     - run: make distro.tar
+      env:
+        BUILD_ID: ${{ github.sha }}
     - uses: actions/upload-artifact@v2
       with:
         name: distro
