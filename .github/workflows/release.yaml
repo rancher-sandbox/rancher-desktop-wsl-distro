@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Release
+on:
+  push:
+    tags:
+    - 'v*'
+    - 'test-v*'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Determine metadata
+      id: metadata
+      run: |
+        tag="$(git describe --tag --abbrev=0)"
+        echo "VERSION_ID=${tag#v}" >> $GITHUB_ENV
+        echo "::set-output name=tag::${tag#test-}"
+    - run: make distro.tar
+      env:
+        BUILD_ID: ${{ github.sha }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: distro
+        path: distro.tar
+    outputs:
+      tag: ${{ steps.metadata.outputs.tag }}
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      tag: ${{ needs.build.outputs.tag }}
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: distro
+    - name: Rename tarball
+      run: mv distro.tar distro-${tag#v}.tar
+    - id: ref
+      run: |
+        ref="${{ github.ref }}"
+        echo "::set-output name=ref::${ref#refs/tags/}"
+    - name: Create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ steps.ref.outputs.ref }}
+      run: >-
+        gh release create
+        "${ref}"
+        "distro-${tag#v}.tar"
+        --draft
+        --title "${tag}"
+        --repo ${{ github.repository }}
