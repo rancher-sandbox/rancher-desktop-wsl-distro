@@ -47,9 +47,10 @@ for package in ${packages}; do
   done
 done
 
-# Add directory for update-ca-certs
+# Add directory for update-ca-certs etc.
 mkdir -p \
   /distro/etc/ssl/certs \
+  /distro/usr/local/bin \
   /distro/usr/local/share/ca-certificates \
   /distro/tmp
 chmod a+rwx /tmp
