@@ -1,8 +1,8 @@
 # /etc/os-release for Rancher Desktop's Linux distribution for WSL2
 # Note that this is a shell script, rather than a proper /etc/os-release file.
 
-NAME="Rancher Desktop WSL Distribution"
-ID=rancher-desktop-wsl-distribution
+NAME="Rancher Desktop WSL Distro"
+ID=rancher-desktop-wsl-distro
 PRETTY_NAME="Rancher Desktop WSL Distribution"
 VERSION_ID="${VERSION_ID:-0.2}"
 BUILD_ID="${BUILD_ID:-}"
