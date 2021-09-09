@@ -19,15 +19,26 @@ apk --root /distro add ca-certificates
 # We don't need the cert symlinks; they'll get regenerated on start.
 find /distro/etc/ssl/certs -type l -delete
 
+# Install nerdctl
+tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
+  bin/buildctl \
+  bin/buildkitd \
+  bin/nerdctl \
+  libexec/cni/bridge \
+  libexec/cni/portmap \
+  libexec/cni/firewall \
+  libexec/cni/tuning \
+  libexec/cni/isolation \
+  libexec/cni/host-local
+# Add packages required for nerdctl
+apk --root /distro add iptables ip6tables
+
 # Create the root user (and delete all other users)
 echo root:x:0:0:root:/root:/bin/sh > /distro/etc/passwd
 
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
 rm -rf /distro/etc/network
-
-# Make directories we need
-mkdir -p /distro/usr/local/bin
 
 # Generate /etc/os-release; we do it this way to evaluate variables.
 . /os-release

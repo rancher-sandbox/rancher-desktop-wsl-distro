@@ -6,6 +6,7 @@ ARG NERDCTL_VERSION
 
 ADD build.sh /
 ADD os-release /
+COPY nerdctl-${NERDCTL_VERSION}.tgz /nerdctl.tgz
 RUN /bin/sh /build.sh
 
 FROM scratch
