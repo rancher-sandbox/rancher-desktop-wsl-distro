@@ -2,67 +2,47 @@
 
 # This is a shell script that generates the target files in /distro
 
-# shellcheck disable=SC3010
+# shellcheck shell=ash
 
 set -o errexit -o nounset -o xtrace
 
-apk add -U ca-certificates
+# Bootstrap an alpine chroot in /distro
+apk add -U alpine-conf
+mkdir /distro
+lbu package - | tar -C /distro -zx
+# Remove unnecessary packages
+rm -f /distro/etc/apk/world
+apk --root /distro --update-cache add --initdb busybox
 
-# Recursively find all package needed for ca-certificates
-packages=" ca-certificates "
+apk --root /distro add ca-certificates
 
-while true; do
-  new_packages=""
-  for package in ${packages}; do
-    for dep in $(apk info --quiet --depends "${package}"); do
-      if [[ "${packages}" != *" ${dep} "* ]]; then
-        new_packages="${dep} ${new_packages}"
-      fi
-    done
-  done
-  if [[ -n "${new_packages}" ]]; then
-    packages="${packages}${new_packages}"
-  else
-    break
-  fi
-done
+# We don't need the cert symlinks; they'll get regenerated on start.
+find /distro/etc/ssl/certs -type l -delete
 
-# Copy files into the distro
-mkdir -p /distro/bin
-cp /bin/busybox /distro/bin/
+# Install nerdctl
+tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
+  bin/buildctl \
+  bin/buildkitd \
+  bin/nerdctl \
+  libexec/cni/bridge \
+  libexec/cni/portmap \
+  libexec/cni/firewall \
+  libexec/cni/tuning \
+  libexec/cni/isolation \
+  libexec/cni/host-local
+# Add packages required for nerdctl
+apk --root /distro add iptables ip6tables
 
-for n in $(busybox --list); do
-  if [ ! -e "/distro/bin/${n}" ]; then
-    ln -s busybox "/distro/bin/${n}"
-  fi
-done
-
-for package in ${packages}; do
-  if [ "${package}" = "/bin/sh" ]; then
-    continue # Skip /bin/sh, this is provideded by busybox
-  fi
-  for path in $(apk info --quiet --contents "${package}"); do
-    mkdir -p "/distro/${path%/*}"
-    cp -P "/${path}" "/distro/${path}"
-  done
-done
-
-# Add directory for update-ca-certs etc.
-mkdir -p \
-  /distro/etc/ssl/certs \
-  /distro/usr/local/bin \
-  /distro/usr/local/share/ca-certificates \
-  /distro/tmp
-chmod a+rwx /tmp
-
-# Copy in the initial certificates
-cp /etc/ssl/certs/ca-certificates.crt /distro/etc/ssl/certs/
-
-# Create the root user
+# Create the root user (and delete all other users)
 echo root:x:0:0:root:/root:/bin/sh > /distro/etc/passwd
+
+# Clean up apk metadata and other unneeded files
+rm -rf /distro/var/cache/apk
+rm -rf /distro/etc/network
 
 # Generate /etc/os-release; we do it this way to evaluate variables.
 . /os-release
+rm -f /distro/etc/os-release # Remove the existing Alpine one
 for field in $(awk -F= '/=/{ print $1 }' /os-release); do
   value="$(eval "echo \${${field}}")"
   if [ -n "${value}" ]; then
