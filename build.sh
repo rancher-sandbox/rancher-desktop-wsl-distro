@@ -33,6 +33,10 @@ tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
 
+# Add guest agent
+chmod +x rancher-desktop-guestagent
+cp rancher-desktop-guestagent /distro/usr/local/bin/
+
 # Create the root user (and delete all other users)
 echo root:x:0:0:root:/root:/bin/sh > /distro/etc/passwd
 
