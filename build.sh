@@ -53,3 +53,9 @@ for field in $(awk -F= '/=/{ print $1 }' /os-release); do
     echo "${field}=\"${value}\"" >> /distro/etc/os-release
   fi
 done
+
+# Configuration for WSL compatibility
+mkdir -p /distro/etc/ld.so.conf.d
+cp wsl.conf /distro/etc/wsl.conf
+printf "#!/bin/sh\nexec /bin/busybox true" > /distro/sbin/ldconfig
+chmod u+x /distro/sbin/ldconfig
