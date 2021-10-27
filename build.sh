@@ -37,6 +37,9 @@ apk --root /distro add iptables ip6tables
 chmod +x rancher-desktop-guestagent
 cp rancher-desktop-guestagent /distro/usr/local/bin/
 
+# Add Moby components
+apk --root /distro add docker-engine
+
 # Create the root user (and delete all other users)
 echo root:x:0:0:root:/root:/bin/sh > /distro/etc/passwd
 
