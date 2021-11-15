@@ -30,6 +30,11 @@ install -D wsl-service /distro/usr/local/bin/wsl-service
 chroot /distro /sbin/rc-update add machine-id sysinit
 echo 'rc_need="!dev"' >> /distro/etc/conf.d/machine-id
 
+# Add logrotate
+apk --root /distro add logrotate
+install crond.sh /distro/etc/init.d/crond
+chroot /distro /sbin/rc-update add crond default
+
 # Create the root user (and delete all other users)
 echo 'root:x:0:0:root:/root:/bin/sh' > /distro/etc/passwd
 echo 'docker:x:101:root' > /distro/etc/group
