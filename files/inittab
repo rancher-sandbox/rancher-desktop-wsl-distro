@@ -1,0 +1,7 @@
+# (busybox) inittab for Rancher-Desktop WSL base image.
+
+#  openrc configuration
+::sysinit:/sbin/openrc sysinit
+::sysinit:/sbin/openrc boot
+::wait:/sbin/openrc default
+::shutdown:/sbin/openrc shutdown

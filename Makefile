@@ -16,7 +16,7 @@ rancher-desktop-guestagent-$(AGENT_VERSION):
 	wget -O "$@" \
 		"https://github.com/rancher-sandbox/rancher-desktop-agent/releases/download/v${AGENT_VERSION}/rancher-desktop-guestagent"
 
-image-id: Dockerfile build.sh os-release wsl.conf nerdctl-$(NERDCTL_VERSION).tgz rancher-desktop-guestagent-$(AGENT_VERSION)
+image-id: Dockerfile $(wildcard files/*) nerdctl-$(NERDCTL_VERSION).tgz rancher-desktop-guestagent-$(AGENT_VERSION)
 	docker build $(foreach a,$(args),$(call arg,$(a))) --iidfile "$@" --file "$<" .
 
 container-id: image-id
