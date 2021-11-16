@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# This script is used to manage an (OpenRC) service on WSL.  This is required as
+# we need to put services in separte PID namespaces there, so using rc-service
+# directly will not return correct results.
+
+set -o errexit -o nounset
+
+# `/usr/local/bin/wsl-init` writes the PID of the _parent_ (unshare) process
+# into /run/wsl-init.pid; so we'll need to look at its children that is init
+# and spawn rc-service within that PID namespace in order to talk to OpenRC
+# correctly.
+
+parent="$(cat /run/wsl-init.pid)"
+pid="$(ps -o pid,ppid,comm | awk '$2 == "'"${parent}"'" && $3 == "init" { print $1 }')"
+
+if [ -z "${pid}" ]; then
+    echo "Could not find init process" >&2
+    exit 1
+fi
+
+exec /usr/bin/nsenter -p -m -t "${pid}" /sbin/rc-service "$@"
