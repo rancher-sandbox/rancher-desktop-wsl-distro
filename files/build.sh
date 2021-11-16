@@ -32,7 +32,7 @@ echo 'rc_need="!dev"' >> /distro/etc/conf.d/machine-id
 
 # Add logrotate
 apk --root /distro add logrotate
-install crond.sh /distro/etc/init.d/crond
+install crond.initd /distro/etc/init.d/crond
 chroot /distro /sbin/rc-update add crond default
 
 # Create the root user (and delete all other users)
@@ -61,7 +61,7 @@ apk --root /distro add iptables ip6tables
 
 # Add guest agent
 install rancher-desktop-guestagent /distro/usr/local/bin
-install rancher-desktop-guestagent.sh /distro/etc/init.d/rancher-desktop-guestagent
+install rancher-desktop-guestagent.initd /distro/etc/init.d/rancher-desktop-guestagent
 chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 
 # Add Moby components
