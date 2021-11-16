@@ -38,6 +38,8 @@ chroot /distro /sbin/rc-update add crond default
 # Create the root user (and delete all other users)
 echo 'root:x:0:0:root:/root:/bin/sh' > /distro/etc/passwd
 echo 'docker:x:101:root' > /distro/etc/group
+# The UUCP group is needed internally by OpenRC for /run/lock.
+# https://github.com/OpenRC/openrc/blob/openrc-0.13.11/sh/init.sh.Linux.in#L71
 echo 'uucp:x:14:root' >> /distro/etc/group
 
 # Add default CA certificates (and update-ca-certificates).
