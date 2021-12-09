@@ -15,7 +15,7 @@ if [ $$ -ne "1" ]; then
     # This is not running as PID 1; this means that this is a normal invocation
     # from WSL.  Set up the namespaces, and try again.
     echo $$ > /run/wsl-init.pid
-    exec /usr/bin/unshare --pid --mount-proc --fork --propagation private "${0}"
+    exec /usr/bin/unshare --pid --mount-proc --fork --propagation slave "${0}"
 fi
 
 # Mark directories that we will need to bind mount as shared mounts.
