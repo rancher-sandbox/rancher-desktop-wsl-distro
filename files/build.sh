@@ -69,6 +69,7 @@ chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 # Add Moby components
 apk --root /distro add docker-engine
 apk --root /distro add curl # for healthcheck
+apk --root /distro add socat # for `kubectl port-forward` using docker-shim
 
 # Create required directories
 install -d /distro/var/log
