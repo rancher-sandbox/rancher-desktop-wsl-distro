@@ -61,6 +61,11 @@ tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
 
+# Add dnsmasq
+apk --root /distro add dnsmasq
+mkdir -p /distro/var/lib/misc
+chroot /distro /sbin/rc-update add dnsmasq default
+
 # Add guest agent
 install rancher-desktop-guestagent /distro/usr/local/bin
 install rancher-desktop-guestagent.initd /distro/etc/init.d/rancher-desktop-guestagent
