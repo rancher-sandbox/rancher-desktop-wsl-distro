@@ -1,5 +1,5 @@
 NERDCTL_VERSION = 0.17.0
-AGENT_VERSION = 0.1.1
+AGENT_VERSION = 0.1.2
 
 distro.tar:
 
