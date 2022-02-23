@@ -51,13 +51,10 @@ find /distro/etc/ssl/certs -type l -delete
 tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
   bin/buildctl \
   bin/buildkitd \
-  bin/nerdctl \
-  libexec/cni/bridge \
-  libexec/cni/portmap \
-  libexec/cni/firewall \
-  libexec/cni/tuning \
-  libexec/cni/isolation \
-  libexec/cni/host-local
+  bin/nerdctl
+# The cni-plugins package does not include the isolation plugin
+tar -xvf /nerdctl.tgz -C /distro/usr/ \
+  libexec/cni/isolation
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
 
@@ -73,6 +70,7 @@ chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 
 # Add Moby components
 apk --root /distro add docker-engine
+apk --root /distro add cni-plugins # instead of using nerdctl plugins because we need flannel and loopback too
 apk --root /distro add curl # for healthcheck
 apk --root /distro add socat # for `kubectl port-forward` using docker-shim
 
