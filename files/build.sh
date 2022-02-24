@@ -71,6 +71,8 @@ chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 # Add Moby components
 apk --root /distro add docker-engine
 apk --root /distro add cni-plugins # instead of using nerdctl plugins because we need flannel and loopback too
+apk --root /distro add cni-plugin-flannel --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+ln -s flannel-amd64 /distro/usr/libexec/cni/flannel
 apk --root /distro add curl # for healthcheck
 apk --root /distro add socat # for `kubectl port-forward` using docker-shim
 
