@@ -75,6 +75,7 @@ apk --root /distro add cni-plugin-flannel --repository=http://dl-cdn.alpinelinux
 ln -s flannel-amd64 /distro/usr/libexec/cni/flannel
 apk --root /distro add curl # for healthcheck
 apk --root /distro add socat # for `kubectl port-forward` using docker-shim
+apk --root /distro add xz # so `docker buildx` can extract files from tar.xz files
 
 # Create required directories
 install -d /distro/var/log
