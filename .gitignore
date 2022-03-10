@@ -1,3 +1,4 @@
 /distro.tar
 /nerdctl-*.tgz
 /rancher-desktop-guestagent-*
+/cri-dockerd-*
