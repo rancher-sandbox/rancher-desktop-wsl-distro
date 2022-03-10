@@ -69,15 +69,13 @@ install rancher-desktop-guestagent.initd /distro/etc/init.d/rancher-desktop-gues
 chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 
 # Install cri-dockerd
-mkdir -p /distro/usr/share/doc/cri-dockerd/
-mkdir -p /distro/cri-dockerd/
-tar -xvf /cri-dockerd.tgz -C /distro/cri-dockerd
-chmod u+s /distro/cri-dockerd/cri-dockerd
-cp /distro/cri-dockerd/cri-dockerd /distro/usr/local/bin/
+mkdir /cri-dockerd
+tar -xvf /cri-dockerd.tgz -C /cri-dockerd
+mv /cri-dockerd/cri-dockerd /distro/usr/local/bin/
 # Copy the LICENSE file for cri-dockerd
 mkdir -p /distro/usr/share/doc/cri-dockerd/
-cp /distro/cri-dockerd/LICENSE /distro/usr/share/doc/cri-dockerd/
-rm -rf /distro/cri-dockerd
+cp /cri-dockerd/LICENSE /distro/usr/share/doc/cri-dockerd/
+rm -rf /cri-dockerd
 
 # Add Moby components
 apk --root /distro add docker-engine docker-cli
