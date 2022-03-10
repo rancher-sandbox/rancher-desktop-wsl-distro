@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This is a shell script that generates the target files in /distro
+# This is a shell script that generates the target files in a temporary root folder /distro
 
 # shellcheck shell=ash
 
@@ -67,6 +67,15 @@ chroot /distro /sbin/rc-update add dnsmasq default
 install rancher-desktop-guestagent /distro/usr/local/bin
 install rancher-desktop-guestagent.initd /distro/etc/init.d/rancher-desktop-guestagent
 chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
+
+# Install cri-dockerd
+mkdir /cri-dockerd
+tar -xvf /cri-dockerd.tgz -C /cri-dockerd
+mv /cri-dockerd/cri-dockerd /distro/usr/local/bin/
+# Copy the LICENSE file for cri-dockerd
+mkdir -p /distro/usr/share/doc/cri-dockerd/
+cp /cri-dockerd/LICENSE /distro/usr/share/doc/cri-dockerd/
+rm -rf /cri-dockerd
 
 # Add Moby components
 apk --root /distro add docker-engine docker-cli
