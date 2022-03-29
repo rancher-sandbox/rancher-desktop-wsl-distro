@@ -90,6 +90,8 @@ apk --root /distro add xz # so `docker buildx` can extract files from tar.xz fil
 install -d /distro/var/log
 ln -s /run /distro/var/run
 
+apk --root /distro add apk-tools
+
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
 rm -rf /distro/etc/network
