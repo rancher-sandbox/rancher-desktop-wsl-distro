@@ -1,6 +1,6 @@
 NERDCTL_VERSION = 0.17.1
 AGENT_VERSION = 0.1.2
-CRI_DOCKERD_VERSION = 0.2.0
+CRI_DOCKERD_VERSION = 0.2.0-1
 
 distro.tar:
 
@@ -19,7 +19,7 @@ rancher-desktop-guestagent-$(AGENT_VERSION):
 
 cri-dockerd-$(CRI_DOCKERD_VERSION).tgz:
 	wget -O "$@" \
-		"https://github.com/Mirantis/cri-dockerd/releases/download/v${CRI_DOCKERD_VERSION}/cri-dockerd-v${CRI_DOCKERD_VERSION}-linux-amd64.tar.gz"
+		"https://github.com/rancher-sandbox/cri-dockerd/releases/download/v${CRI_DOCKERD_VERSION}/cri-dockerd-v${CRI_DOCKERD_VERSION}-linux-amd64.tar.gz"
 
 image-id: Dockerfile $(wildcard files/*) nerdctl-$(NERDCTL_VERSION).tgz rancher-desktop-guestagent-$(AGENT_VERSION) cri-dockerd-$(CRI_DOCKERD_VERSION).tgz
 	docker build $(foreach a,$(args),$(call arg,$(a))) --iidfile "$@" --file "$<" .
