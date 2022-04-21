@@ -52,9 +52,6 @@ tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
   bin/buildctl \
   bin/buildkitd \
   bin/nerdctl
-# The cni-plugins package does not include the isolation plugin
-tar -xvf /nerdctl.tgz -C /distro/usr/ \
-  libexec/cni/isolation
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
 
