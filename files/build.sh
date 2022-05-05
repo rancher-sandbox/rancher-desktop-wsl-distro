@@ -88,6 +88,7 @@ install -d /distro/var/log
 ln -s /run /distro/var/run
 
 apk --root /distro add apk-tools
+apk --root /distro add curl
 
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
