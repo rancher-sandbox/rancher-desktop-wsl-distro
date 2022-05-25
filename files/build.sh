@@ -68,10 +68,10 @@ chroot /distro /sbin/rc-update add rancher-desktop-guestagent default
 # Install cri-dockerd
 mkdir /cri-dockerd
 tar -xvf /cri-dockerd.tgz -C /cri-dockerd
-mv /cri-dockerd/cri-dockerd /distro/usr/local/bin/
+mv /cri-dockerd/cri-dockerd/cri-dockerd /distro/usr/local/bin/
 # Copy the LICENSE file for cri-dockerd
 mkdir -p /distro/usr/share/doc/cri-dockerd/
-cp /cri-dockerd/LICENSE /distro/usr/share/doc/cri-dockerd/
+cp /cri-dockerd.LICENSE /distro/usr/share/doc/cri-dockerd/LICENSE
 rm -rf /cri-dockerd
 
 # Add Moby components
