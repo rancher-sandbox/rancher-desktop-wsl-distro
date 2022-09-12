@@ -90,6 +90,7 @@ ln -s /run /distro/var/run
 apk --root /distro add apk-tools
 apk --root /distro add curl
 apk --root /distro add sudo
+apk --root /distro add git # so docker-compose can use a git URL
 
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
