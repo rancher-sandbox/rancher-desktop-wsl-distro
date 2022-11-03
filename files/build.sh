@@ -91,6 +91,7 @@ apk --root /distro add apk-tools
 apk --root /distro add curl
 apk --root /distro add sudo
 apk --root /distro add git # so docker-compose can use a git URL
+apk --root /distro add zstd # because `docker load` doesn't support .tar.zst files
 
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
