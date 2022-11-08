@@ -9,7 +9,6 @@ ARG OPENRESTY_VERSION
 
 ADD files/ /
 COPY nerdctl-${NERDCTL_VERSION}.tgz /nerdctl.tgz
-COPY rancher-desktop-guestagent-${AGENT_VERSION} /rancher-desktop-guestagent
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.tgz /cri-dockerd.tgz
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.LICENSE /cri-dockerd.LICENSE
 ADD openresty-v${OPENRESTY_VERSION}-x86_64.tar /openresty
