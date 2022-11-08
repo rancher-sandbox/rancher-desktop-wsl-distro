@@ -1,5 +1,4 @@
 NERDCTL_VERSION = 1.0.0
-AGENT_VERSION = 0.1.2
 OPENRESTY_VERSION=0.0.1
 CRI_DOCKERD_VERSION = 0.2.3
 CRI_DOCKERD_ORG=Mirantis
@@ -9,15 +8,11 @@ distro.tar:
 # Make expansion to add --build-arg for a variable if it's set.
 arg = $(if $($(1)),--build-arg "$(1)=$($(1))")
 
-args = BUILD_ID VERSION_ID NERDCTL_VERSION AGENT_VERSION CRI_DOCKERD_VERSION OPENRESTY_VERSION
+args = BUILD_ID VERSION_ID NERDCTL_VERSION CRI_DOCKERD_VERSION OPENRESTY_VERSION
 
 nerdctl-$(NERDCTL_VERSION).tgz:
 	wget -O "$@" \
 		"https://github.com/containerd/nerdctl/releases/download/v${NERDCTL_VERSION}/nerdctl-full-${NERDCTL_VERSION}-linux-amd64.tar.gz"
-
-rancher-desktop-guestagent-$(AGENT_VERSION):
-	wget -O "$@" \
-		"https://github.com/rancher-sandbox/rancher-desktop-agent/releases/download/v${AGENT_VERSION}/rancher-desktop-guestagent"
 
 cri-dockerd-$(CRI_DOCKERD_VERSION).tgz:
 	wget -O "$@" \
@@ -29,7 +24,7 @@ openresty-v$(OPENRESTY_VERSION)-x86_64.tar:
 	wget -O "$@" \
 	     "https://github.com/rancher-sandbox/openresty-packaging/releases/download/v$(OPENRESTY_VERSION)/$@"
 
-image-id: Dockerfile $(wildcard files/*) nerdctl-$(NERDCTL_VERSION).tgz rancher-desktop-guestagent-$(AGENT_VERSION) cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-v$(OPENRESTY_VERSION)-x86_64.tar
+image-id: Dockerfile $(wildcard files/*) nerdctl-$(NERDCTL_VERSION).tgz cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-v$(OPENRESTY_VERSION)-x86_64.tar
 	docker build $(foreach a,$(args),$(call arg,$(a))) --iidfile "$@" --file "$<" .
 
 container-id: image-id
