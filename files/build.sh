@@ -93,6 +93,9 @@ apk --root /distro add sudo
 apk --root /distro add git # so docker-compose can use a git URL
 apk --root /distro add zstd # because `docker load` doesn't support .tar.zst files
 
+# mkcert is used by the image-allow-list feature
+apk --root /distro add mkcert --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
+
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
 rm -rf /distro/etc/network
