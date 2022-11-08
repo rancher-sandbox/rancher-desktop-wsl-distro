@@ -2,3 +2,4 @@
 /nerdctl-*.tgz
 /rancher-desktop-guestagent-*
 /cri-dockerd-*
+/openresty-*
