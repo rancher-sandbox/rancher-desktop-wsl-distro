@@ -52,6 +52,17 @@ tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
   bin/buildctl \
   bin/buildkitd \
   bin/nerdctl
+
+# Move nerdctl to /usr/local/libexec and replace it with a wrapper,
+# so we can later setup environment variables for nerdctl in there.
+mkdir -p /distro/usr/local/libexec/nerdctl
+mv /distro/usr/local/bin/nerdctl /distro/usr/local/libexec/nerdctl/
+cat <<EOF > /distro/usr/local/bin/nerdctl
+#!/bin/sh
+exec /usr/local/libexec/nerdctl/nerdctl "\$@"
+EOF
+chmod 755 /distro/usr/local/bin/nerdctl
+
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
 
