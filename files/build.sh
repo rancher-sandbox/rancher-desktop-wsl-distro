@@ -84,7 +84,6 @@ rm -rf /cri-dockerd
 apk --root /distro add docker-engine docker-cli
 apk --root /distro add cni-plugins
 apk --root /distro add cni-plugin-flannel
-ln -s flannel-amd64 /distro/usr/libexec/cni/flannel
 apk --root /distro add curl # for healthcheck
 apk --root /distro add socat # for `kubectl port-forward` using docker-shim
 apk --root /distro add xz # so `docker buildx` can extract files from tar.xz files
