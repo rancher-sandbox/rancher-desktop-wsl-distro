@@ -1,3 +1,4 @@
+RD_NETWORKING_VERSION = 0.1.0
 NERDCTL_VERSION = 1.2.1
 OPENRESTY_VERSION=0.0.1
 CRI_DOCKERD_VERSION = 0.2.6
@@ -8,7 +9,11 @@ distro.tar:
 # Make expansion to add --build-arg for a variable if it's set.
 arg = $(if $($(1)),--build-arg "$(1)=$($(1))")
 
-args = BUILD_ID VERSION_ID NERDCTL_VERSION CRI_DOCKERD_VERSION OPENRESTY_VERSION
+args = BUILD_ID VERSION_ID RD_NETWORKING_VERSION NERDCTL_VERSION CRI_DOCKERD_VERSION OPENRESTY_VERSION
+
+rd-networking-v$(RD_NETWORKING_VERSION).tgz:
+	wget -O "$@" \
+		"https://github.com/rancher-sandbox/rancher-desktop-networking/releases/download/v${RD_NETWORKING_VERSION}/rancher-desktop-networking-v${RD_NETWORKING_VERSION}.tar.gz"
 
 nerdctl-$(NERDCTL_VERSION).tgz:
 	wget -O "$@" \
@@ -24,7 +29,7 @@ openresty-v$(OPENRESTY_VERSION)-x86_64.tar:
 	wget -O "$@" \
 	     "https://github.com/rancher-sandbox/openresty-packaging/releases/download/v$(OPENRESTY_VERSION)/$@"
 
-image-id: Dockerfile $(wildcard files/*) nerdctl-$(NERDCTL_VERSION).tgz cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-v$(OPENRESTY_VERSION)-x86_64.tar
+image-id: Dockerfile $(wildcard files/*) rd-networking-v$(RD_NETWORKING_VERSION).tgz nerdctl-$(NERDCTL_VERSION).tgz cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-v$(OPENRESTY_VERSION)-x86_64.tar
 	docker build $(foreach a,$(args),$(call arg,$(a))) --iidfile "$@" --file "$<" .
 
 container-id: image-id

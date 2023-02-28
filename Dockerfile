@@ -2,12 +2,14 @@ FROM alpine as builder
 
 ARG BUILD_ID=
 ARG VERSION_ID=0.4
+ARG RD_NETWORKING_VERSION
 ARG NERDCTL_VERSION
 ARG AGENT_VERSION
 ARG CRI_DOCKERD_VERSION
 ARG OPENRESTY_VERSION
 
 ADD files/ /
+COPY rd-networking-v${RD_NETWORKING_VERSION}.tgz /rd-networking.tgz
 COPY nerdctl-${NERDCTL_VERSION}.tgz /nerdctl.tgz
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.tgz /cri-dockerd.tgz
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.LICENSE /cri-dockerd.LICENSE

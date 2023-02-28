@@ -1,4 +1,5 @@
 /distro.tar
+/rd-networking-*.tgz
 /nerdctl-*.tgz
 /rancher-desktop-guestagent-*
 /cri-dockerd-*
