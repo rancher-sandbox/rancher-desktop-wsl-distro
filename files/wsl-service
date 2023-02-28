@@ -19,4 +19,4 @@ if [ -z "${pid}" ]; then
     exit 1
 fi
 
-exec /usr/bin/nsenter -p -m -t "${pid}" /sbin/rc-service "$@"
+exec /usr/bin/nsenter -n -p -m -t "${pid}" /sbin/rc-service "$@"
