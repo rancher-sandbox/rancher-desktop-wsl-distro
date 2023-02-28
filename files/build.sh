@@ -23,7 +23,6 @@ echo 'skip_mount_dev="YES"' >> /distro/etc/conf.d/devfs
 echo 'rc_cgroup_mode="none"' >> /distro/etc/conf.d/cgroups
 
 # Add init script
-install -D wsl-init /distro/usr/local/bin/wsl-init
 install -D wsl-service /distro/usr/local/bin/wsl-service
 
 # Create default runlevels
@@ -48,7 +47,7 @@ apk --root /distro add ca-certificates
 find /distro/etc/ssl/certs -type l -delete
 
 # Install rd-networking
-tar -xvf /rd-networking.tgz -C /distro/usr/local/bin/ ./network-setup ./vm-switch \
+tar -xvf /rd-networking.tgz -C /distro/usr/local/bin/ ./network-setup ./vm-switch
 
 # Install nerdctl
 tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
