@@ -100,6 +100,7 @@ apk --root /distro add sudo
 apk --root /distro add git # so docker-compose can use a git URL
 apk --root /distro add zstd # because `docker load` doesn't support .tar.zst files
 apk --root /distro add tar # because `nerdctl cp` needs GNU tar
+apk --root /distro add containerd-ctr # needed to copy files to the host
 
 # mkcert is used by the image-allow-list feature
 apk --root /distro add mkcert --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing

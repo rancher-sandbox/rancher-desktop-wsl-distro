@@ -1,4 +1,5 @@
-FROM alpine as builder
+ARG ALPINE_VERSION=3.18
+FROM alpine:${ALPINE_VERSION} as builder
 
 ARG BUILD_ID=
 ARG VERSION_ID=0.4
