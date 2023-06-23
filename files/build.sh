@@ -83,7 +83,7 @@ cp /cri-dockerd.LICENSE /distro/usr/share/doc/cri-dockerd/LICENSE
 rm -rf /cri-dockerd
 
 # Add Moby components
-apk --root /distro add docker-engine docker-cli
+apk --root /distro add docker-engine docker-cli docker-cli-buildx
 apk --root /distro add cni-plugins
 apk --root /distro add cni-plugin-flannel
 apk --root /distro add curl # for healthcheck
