@@ -67,7 +67,8 @@ chmod 755 /distro/usr/local/bin/nerdctl
 
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables
-apk --root /distro add tini
+apk --root /distro add tini-static
+ln -s /sbin/tini-static /distro/usr/bin/tini
 
 # Add dnsmasq
 apk --root /distro add dnsmasq
