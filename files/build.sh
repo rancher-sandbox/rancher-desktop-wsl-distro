@@ -47,7 +47,7 @@ apk --root /distro add ca-certificates
 find /distro/etc/ssl/certs -type l -delete
 
 # Install rd-networking
-tar -xvf /rd-networking.tgz -C /distro/usr/local/bin/ ./network-setup ./vm-switch
+tar -xvf /rd-networking.tgz -C /distro/usr/local/bin/ ./network-setup ./vm-switch ./wsl-proxy
 
 # Install nerdctl
 tar -xvf /nerdctl.tgz -C /distro/usr/local/ \
