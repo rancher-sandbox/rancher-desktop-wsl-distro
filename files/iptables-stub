@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# This is a script to dynamically select between nftables and iptables-legacy
+# depending on the kernel version.  This is necessary to support older versions
+# of WSL that runs kernel <5.15 (where nftables doesn't work).
+#
+# This works by figuring out the correct executable to use, and then bind
+# mounting the correct executable on top of this script (which doesn't persist
+# across reboot), before running the desired command again, this time using the
+# target executable.
+
+set -o errexit -o nounset
+
+version="$(uname -r)"
+major="${version%%.*}"
+minor="${version#*.}"
+minor="${minor%%.*}"
+
+# shellcheck disable=2166 # We only care about busybox; tested to work.
+if [ "$major" -lt 5 ] || [ "$major" -eq 5 -a "$minor" -lt 15 ]; then
+    mount --bind /sbin/xtables-legacy-multi /usr/local/bin/iptables-stub
+else
+    mount --bind /sbin/xtables-nft-multi /usr/local/bin/iptables-stub
+fi
+
+# Re-run this script, using the same name as originally invoked.
+exec "$0" "$@"

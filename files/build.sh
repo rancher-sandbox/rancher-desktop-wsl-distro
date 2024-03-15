@@ -66,7 +66,7 @@ EOF
 chmod 755 /distro/usr/local/bin/nerdctl
 
 # Add packages required for nerdctl
-apk --root /distro add iptables ip6tables
+apk --root /distro add iptables ip6tables iptables-legacy
 apk --root /distro add tini-static
 ln -s /sbin/tini-static /distro/usr/bin/tini
 
@@ -109,6 +109,15 @@ apk --root /distro add mkcert --repository=http://dl-cdn.alpinelinux.org/alpine/
 
 # add openresty with http-proxy-connect module for the image-allow-list feature
 apk --root /distro add --allow-untrusted --force-non-repository /openresty/x86_64/*.apk
+
+# Override iptables to support older kernels
+cp /iptables-stub /distro/usr/local/bin/iptables-stub
+chmod a+x /distro/usr/local/bin/iptables-stub
+for family in iptables ip6tables; do
+  for suffix in '' -save -restore; do
+    ln -sfT /usr/local/bin/iptables-stub "/distro/sbin/${family}${suffix}"
+  done
+done
 
 # Clean up apk metadata and other unneeded files
 rm -rf /distro/var/cache/apk
