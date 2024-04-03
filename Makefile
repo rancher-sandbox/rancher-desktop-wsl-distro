@@ -7,25 +7,25 @@ arg = $(if $($(1)),--build-arg "$(1)=$($(1))")
 
 args = BUILD_ID VERSION_ID RD_NETWORKING_VERSION NERDCTL_VERSION CRI_DOCKERD_VERSION OPENRESTY_VERSION
 
-rd-networking-v$(RD_NETWORKING_VERSION).tgz:
+rd-networking-$(RD_NETWORKING_VERSION).tgz:
 	wget -O "$@" \
-		"https://github.com/rancher-sandbox/rancher-desktop-networking/releases/download/v${RD_NETWORKING_VERSION}/rancher-desktop-networking-v${RD_NETWORKING_VERSION}.tar.gz"
+		"https://github.com/$(RD_NETWORKING_REPO)/releases/download/${RD_NETWORKING_VERSION}/rancher-desktop-networking-${RD_NETWORKING_VERSION}.tar.gz"
 
 nerdctl-$(NERDCTL_VERSION).tgz:
 	wget -O "$@" \
-		"https://github.com/containerd/nerdctl/releases/download/v${NERDCTL_VERSION}/nerdctl-full-${NERDCTL_VERSION}-linux-amd64.tar.gz"
+		"https://github.com/$(NERDCTL_REPO)/releases/download/${NERDCTL_VERSION}/nerdctl-full-${NERDCTL_VERSION:v%=%}-linux-amd64.tar.gz"
 
 cri-dockerd-$(CRI_DOCKERD_VERSION).tgz:
 	wget -O "$@" \
-		"https://github.com/$(CRI_DOCKERD_ORG)/cri-dockerd/releases/download/v${CRI_DOCKERD_VERSION}/cri-dockerd-${CRI_DOCKERD_VERSION}.amd64.tgz"
+		"https://github.com/$(CRI_DOCKERD_REPO)/releases/download/${CRI_DOCKERD_VERSION}/cri-dockerd-${CRI_DOCKERD_VERSION:v%=%}.amd64.tgz"
 	wget -O "cri-dockerd-$(CRI_DOCKERD_VERSION).LICENSE" \
-		"https://raw.githubusercontent.com/$(CRI_DOCKERD_ORG)/cri-dockerd/v$(CRI_DOCKERD_VERSION)/LICENSE"
+		"https://raw.githubusercontent.com/$(CRI_DOCKERD_REPO)/$(CRI_DOCKERD_VERSION)/LICENSE"
 
-openresty-v$(OPENRESTY_VERSION)-x86_64.tar:
+openresty-$(OPENRESTY_VERSION)-x86_64.tar:
 	wget -O "$@" \
-	     "https://github.com/rancher-sandbox/openresty-packaging/releases/download/v$(OPENRESTY_VERSION)/$@"
+	     "https://github.com/$(OPENRESTY_REPO)/releases/download/$(OPENRESTY_VERSION)/$@"
 
-image-id: Dockerfile $(wildcard files/*) rd-networking-v$(RD_NETWORKING_VERSION).tgz nerdctl-$(NERDCTL_VERSION).tgz cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-v$(OPENRESTY_VERSION)-x86_64.tar
+image-id: Dockerfile $(wildcard files/*) rd-networking-$(RD_NETWORKING_VERSION).tgz nerdctl-$(NERDCTL_VERSION).tgz cri-dockerd-$(CRI_DOCKERD_VERSION).tgz openresty-$(OPENRESTY_VERSION)-x86_64.tar
 	docker build $(foreach a,$(args),$(call arg,$(a))) --iidfile "$@" --file "$<" .
 
 container-id: image-id
@@ -36,3 +36,4 @@ distro.tar: container-id
 	docker rm -f "$(shell cat "$<")"
 
 .INTERMEDIATE: image-id container-id
+.DELETE_ON_ERROR: # Avoid half-downloaded files
