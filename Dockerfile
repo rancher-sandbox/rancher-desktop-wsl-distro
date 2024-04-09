@@ -10,11 +10,11 @@ ARG CRI_DOCKERD_VERSION
 ARG OPENRESTY_VERSION
 
 ADD files/ /
-COPY rd-networking-v${RD_NETWORKING_VERSION}.tgz /rd-networking.tgz
+COPY rd-networking-${RD_NETWORKING_VERSION}.tgz /rd-networking.tgz
 COPY nerdctl-${NERDCTL_VERSION}.tgz /nerdctl.tgz
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.tgz /cri-dockerd.tgz
 COPY cri-dockerd-${CRI_DOCKERD_VERSION}.LICENSE /cri-dockerd.LICENSE
-ADD openresty-v${OPENRESTY_VERSION}-x86_64.tar /openresty
+ADD openresty-${OPENRESTY_VERSION}-x86_64.tar /openresty
 RUN /bin/sh /build.sh
 
 FROM scratch
