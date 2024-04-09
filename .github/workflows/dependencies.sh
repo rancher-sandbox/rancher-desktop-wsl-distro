@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Checks dependencies in `versions.env`
-# Requires `bats-core/bats-core/contrib/semver` to be on $PATH.
+# Requires `https://github.com/fsaintjacques/semver-tool` to be on $PATH.
 # This expects to be run from GitHub Actions.
 
 set -o allexport -o errexit -o nounset #-o xtrace
@@ -10,7 +10,7 @@ set +o allexport
 
 n=$'\n'
 
-# Iterate over all envrionment variables
+# Iterate over all environment variables
 for repo_var in $(compgen -e); do
     short_name="${!repo_var##*/}" # short repo name
     prefix="${repo_var%_REPO}" # prefix of the environment variable name
@@ -24,20 +24,18 @@ for repo_var in $(compgen -e); do
         continue
     fi
 
-    # Read in all the releaseas available, excluding pre-releases and drafts.
+    # Read in all the releases available, excluding pre-releases and drafts.
     printf "Checking %s...\n" "$short_name"
     IFS=$'\n' read -d '' -r -a all_versions < <({
-    gh api "repos/${!repo_var}/releases" --jq \
-        '.[] | select((.prerelease or .draft) | not) | .tag_name'
-      printf "\0"
-    })
+        gh api "repos/${!repo_var}/releases" --jq \
+            '.[] | select((.prerelease or .draft) | not) | .tag_name'
+        printf "\0"
+        })
 
     # See if any version is higher than what we already have.
     target_version="${!version_var}"
     for version in "${all_versions[@]}"; do
-        if [[ -z "$target_version" ]]; then
-            target_version="${version}"
-        elif [[ "$(semver compare "$target_version" "$version")" == "-1" ]]; then
+        if [[ "$(semver compare "$target_version" "$version")" == "-1" ]]; then
             target_version="$version"
         fi
     done

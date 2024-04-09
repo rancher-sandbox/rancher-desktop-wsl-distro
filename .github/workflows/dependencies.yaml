@@ -22,7 +22,7 @@ jobs:
         persist-credentials: true
     - run: |
         sudo wget -O /usr/local/bin/semver \
-          https://raw.githubusercontent.com/bats-core/bats-core/v1.11.0/contrib/semver
+          https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.4.0/src/semver
         sudo chmod a+x /usr/local/bin/semver
     - run: bash .github/workflows/dependencies.sh
       env:
