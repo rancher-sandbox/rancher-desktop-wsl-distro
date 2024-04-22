@@ -65,6 +65,9 @@ exec /usr/local/libexec/nerdctl/nerdctl "\$@"
 EOF
 chmod 755 /distro/usr/local/bin/nerdctl
 
+# Add zoneinfo database (used by k8s CronJob controller)
+apk --root /distro add tzdata
+
 # Add packages required for nerdctl
 apk --root /distro add iptables ip6tables iptables-legacy
 apk --root /distro add tini-static
