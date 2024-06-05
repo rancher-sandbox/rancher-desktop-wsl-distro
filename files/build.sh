@@ -111,7 +111,8 @@ apk --root /distro add containerd-ctr # needed to copy files to the host
 apk --root /distro add mkcert --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 # add openresty with http-proxy-connect module for the image-allow-list feature
-apk --root /distro add --allow-untrusted --force-non-repository /openresty/x86_64/*.apk
+cp /openresty/rd-openresty-*.pub /distro/etc/apk/keys
+apk --root /distro add --force-non-repository /openresty/x86_64/*.apk
 
 # Override iptables to support older kernels
 cp /iptables-stub /distro/usr/local/bin/iptables-stub
