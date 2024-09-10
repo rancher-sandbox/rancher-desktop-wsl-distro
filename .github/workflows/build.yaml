@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         persist-credentials: false
         fetch-depth: 0
@@ -20,7 +20,7 @@ jobs:
     - run: make distro.tar
       env:
         BUILD_ID: ${{ github.sha }}
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: distro
         path: distro.tar
