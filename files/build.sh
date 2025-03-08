@@ -40,6 +40,8 @@ echo 'docker:x:101:root' > /distro/etc/group
 # The UUCP group is needed internally by OpenRC for /run/lock.
 # https://github.com/OpenRC/openrc/blob/openrc-0.13.11/sh/init.sh.Linux.in#L71
 echo 'uucp:x:14:root' >> /distro/etc/group
+mkdir -p /distro/root
+cp /profile /distro/root/.profile
 
 # Add default CA certificates (and update-ca-certificates).
 apk --root /distro add ca-certificates
