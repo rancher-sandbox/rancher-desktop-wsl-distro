@@ -3,7 +3,7 @@
 # distribution interactively.
 
 if busybox [[ "$-" == "*i*" ]]; then
-    <<-EOF tr '\n' ' ' | fold -s >&2
+    <<-EOF busybox tr '\n' ' ' | busybox fold -s >&2
 	The ${WSL_DISTRO_NAME:-rancher-desktop} WSL distribution is not meant to be
 	used to run any applications interactively. It is an implementation detail
 	of Rancher Desktop. Please enable WSL integration in the Preferences to
@@ -11,8 +11,8 @@ if busybox [[ "$-" == "*i*" ]]; then
 	Alternatively, the tools are available in Windows (such as via Command
 	Prompt or PowerShell).
 	EOF
-    printf "\n\n" >&2
-    <<-'EOF' tr '\n' ' ' | fold -s >&2
+    busybox printf "\n\n" >&2
+    <<-'EOF' busybox tr '\n' ' ' | busybox fold -s >&2
 	For troubleshooting Rancher Desktop, please use `rdctl shell`.
 	EOF
     exit 0
