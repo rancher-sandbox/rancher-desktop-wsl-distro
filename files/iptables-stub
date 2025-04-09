@@ -18,9 +18,9 @@ minor="${minor%%.*}"
 
 # shellcheck disable=2166 # We only care about busybox; tested to work.
 if [ "$major" -lt 5 ] || [ "$major" -eq 5 -a "$minor" -lt 15 ]; then
-    mount --bind /sbin/xtables-legacy-multi /usr/local/bin/iptables-stub
+    mount --bind /usr/sbin/xtables-legacy-multi /usr/local/bin/iptables-stub
 else
-    mount --bind /sbin/xtables-nft-multi /usr/local/bin/iptables-stub
+    mount --bind /usr/sbin/xtables-nft-multi /usr/local/bin/iptables-stub
 fi
 
 # Re-run this script, using the same name as originally invoked.
