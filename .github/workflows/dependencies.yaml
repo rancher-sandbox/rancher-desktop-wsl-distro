@@ -18,7 +18,7 @@ jobs:
       id-token: write # For rancher-eio/read-value-secrets
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       with:
         persist-credentials: true
     - run: |
@@ -29,13 +29,13 @@ jobs:
       if: github.repository_owner != 'rancher-sandbox'
       env:
         GH_TOKEN: ${{ secrets.RUN_WORKFLOW_FROM_WORKFLOW }}
-    - uses: rancher-eio/read-vault-secrets@main
+    - uses: rancher-eio/read-vault-secrets@0da85151ad1f19ed7986c41587e45aac1ace74b6 # v3
       if: github.repository_owner == 'rancher-sandbox'
       with:
         secrets: |
           secret/data/github/repo/${{ github.repository }}/github/app-credentials appId | APP_ID ;
           secret/data/github/repo/${{ github.repository }}/github/app-credentials privateKey | PRIVATE_KEY
-    - uses: actions/create-github-app-token@v1
+    - uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
       if: github.repository_owner == 'rancher-sandbox'
       id: app-token
       with:
