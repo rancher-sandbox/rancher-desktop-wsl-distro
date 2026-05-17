@@ -99,7 +99,6 @@ install -d /distro/var/log
 ln -s /run /distro/var/run
 
 apk --root /distro add apk-tools
-apk --root /distro add curl
 apk --root /distro add sudo
 apk --root /distro add git # so docker-compose can use a git URL
 apk --root /distro add zstd # because `docker load` doesn't support .tar.zst files
