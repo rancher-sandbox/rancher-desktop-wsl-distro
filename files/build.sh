@@ -86,13 +86,6 @@ mkdir -p /distro/usr/share/doc/cri-dockerd/
 cp /cri-dockerd.LICENSE /distro/usr/share/doc/cri-dockerd/LICENSE
 rm -rf /cri-dockerd
 
-# Temporarily install containerd from the edge repo to address recent CVEs.
-# Must be installed before docker which would pull it in as a dependency.
-# Explicitly install runc from the regular repo first.
-apk --root /distro add runc
-apk --root /distro add containerd --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-apk --root /distro add containerd-ctr --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-
 # Add Moby components
 apk --root /distro add docker-engine docker-cli docker-cli-buildx
 apk --root /distro add cni-plugins
@@ -110,8 +103,7 @@ apk --root /distro add sudo
 apk --root /distro add git # so docker-compose can use a git URL
 apk --root /distro add zstd # because `docker load` doesn't support .tar.zst files
 apk --root /distro add tar # because `nerdctl cp` needs GNU tar
-# containerd and containerd-ctr already copied above
-# apk --root /distro add containerd-ctr # needed to copy files to the host
+apk --root /distro add containerd-ctr # needed to copy files to the host
 apk --root /distro add iproute2-minimal # For `ip -json`
 
 # mkcert is used by the image-allow-list feature
